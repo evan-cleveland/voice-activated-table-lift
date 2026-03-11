@@ -5,6 +5,9 @@ This project is a coffee table with a hidden lift mechanism that opens a compart
 At the moment, this repository contains the actuator-side ESP32 firmware and the mechanical / electronics design files. The actual speech-recognition or password-detection code is not in this repo yet, but will be in a matter of hours.
 
 ## [Current state of the project](https://youtube.com/shorts/O5TE6jEasQA?si=kaMg7j4xVM5jBZLz)
+- I am successfully able to set any keywords as the open, close, and stop commands, and have the actuator respond as expected
+- High latency from word detection model due to Pi Zero W running GUI and background tasks. This will be fixed with a headless OS.
+- The lack of a proper footprint for parts has delayed PCB design.
 
 ## What is in the repo
 
