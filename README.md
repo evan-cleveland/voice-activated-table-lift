@@ -2,7 +2,9 @@
 
 This project is a coffee table with a hidden lift mechanism that opens a compartment when the control electronics are triggered by a voice-password system.
 
-At the moment, this repository contains the actuator-side ESP32 firmware and the mechanical / electronics design files. The actual speech-recognition or password-detection code is not in this repo yet.
+At the moment, this repository contains the actuator-side ESP32 firmware and the mechanical / electronics design files. The actual speech-recognition or password-detection code is not in this repo yet, but will be in a matter of hours.
+
+## [Current state of the project](https://youtube.com/shorts/O5TE6jEasQA?si=kaMg7j4xVM5jBZLz)
 
 ## What is in the repo
 
