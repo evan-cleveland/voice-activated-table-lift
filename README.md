@@ -89,18 +89,4 @@ pio device monitor --baud 115200
             `-- src/main.cpp
 ```
 
-## Current limitations
 
-- No speech-recognition pipeline is included here yet.
-- No limit switches, current sensing, or position feedback are implemented in firmware.
-- Motor speed and timing are not configurable.
-- The KiCad schematic appears to be only a stub at the moment.
-
-## Next steps
-
-Useful follow-up work for this project:
-
-- add the voice-password controller code or document the external trigger source,
-- add endstop handling so the lift cannot overrun,
-- document the wiring with a real schematic,
-- add photos, assembly notes, and a bill of materials.
