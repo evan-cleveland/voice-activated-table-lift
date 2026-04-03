@@ -1,0 +1,25 @@
+{
+  "serial_port": "/dev/serial0",
+  "baud_rate": 115200,
+  "cooldown_seconds": 1.5,
+  "allow_repeat_stop": true,
+  "pocketsphinx_binary": "pocketsphinx_continuous",
+  "keywords_file": "keywords.list",
+  "keywords": [
+    {
+      "phrase": "open",
+      "threshold": "1e-20",
+      "command": "EXTEND"
+    },
+    {
+      "phrase": "close",
+      "threshold": "1e-20",
+      "command": "RETRACT"
+    },
+    {
+      "phrase": "stop",
+      "threshold": "1e-20",
+      "command": "STOP"
+    }
+  ]
+}
