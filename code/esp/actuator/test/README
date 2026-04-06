@@ -1,11 +1,15 @@
 
-This directory is intended for PlatformIO Test Runner and project tests.
+PlatformIO test directory for the ESP32 actuator firmware.
 
-Unit Testing is a software testing method by which individual units of
-source code, sets of one or more MCU program modules together with associated
-control data, usage procedures, and operating procedures, are tested to
-determine whether they are fit for use. Unit testing finds problems early
-in the development cycle.
+Current status:
 
-More information about PlatformIO Unit Testing:
-- https://docs.platformio.org/en/latest/advanced/unit-testing/index.html
+- No automated tests are checked in.
+
+Useful future targets for tests:
+
+- command-bit decoding
+- stop behavior for `00` and `11`
+- motor direction selection for `01` and `10`
+- any future safety interlocks or limit-switch logic
+
+When tests are added, place them here for use with `pio test`.
