@@ -20,6 +20,7 @@ Current pin usage:
 
 - Raspberry Pi outputs: BCM `17` and `27`
 - ESP32 inputs: GPIO `26` and `27`
+- ESP32 contract limit switch input: GPIO `25` with `INPUT_PULLUP`
 - ESP32 motor driver pins:
   - `RPWM = 19`
   - `LPWM = 21`
@@ -56,6 +57,7 @@ code/
 
 ## Notes
 
+- The ESP32 retract path is interlocked by a normally-open limit switch that pulls GPIO `25` to ground when depressed.
 - `voice_config.json` still includes `serial_port` and `baud_rate`, but the current script does not use serial.
 - `pi/requirements.txt` appears to be a full environment freeze, not a minimal project dependency list.
 - The generated keyword file is written to `pi/keywords.list` each time the bridge starts.

@@ -22,15 +22,26 @@ The firmware reads two input pins with pulldowns enabled:
 
 - `S1 = 26`
 - `S0 = 27`
+- `CONTRACT_LIMIT_SWITCH = 25`
 
 Command behavior:
 
 - `11` -> stop motor
 - `01` -> drive `RPWM`
-- `10` -> drive `LPWM`
+- `10` -> drive `LPWM` unless the contract limit switch is active
 - `00` -> stop motor
 
 This matches the command encoding produced by the Pi bridge.
+
+## Contract Limit Switch
+
+The contract limit switch input uses the ESP32 internal pull-up:
+
+- wiring mode: normally open
+- inactive state: open circuit, input reads `HIGH`
+- active state: switch depressed, input is connected to ground and reads `LOW`
+
+When the switch is active, the firmware stops the motor and ignores further retract commands until the switch is released.
 
 ## Motor Driver Pins
 
@@ -62,5 +73,6 @@ You can also build and upload through the PlatformIO VS Code extension if that i
 ## Wiring Notes
 
 - The two command input lines should come from the Raspberry Pi GPIO outputs documented in the Pi README.
+- Wire the contract limit switch between GPIO `25` and ground if you use the default pin assignment in `src/main.cpp`.
 - Grounds must be shared between the control side and the ESP32.
 - Confirm that the electrical interface between the Pi GPIO and ESP32 input pins is safe for your board configuration.

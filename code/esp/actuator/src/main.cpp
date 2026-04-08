@@ -12,6 +12,7 @@ static const int PWM_CH_L = 1;
 
 static const int S1 = 26;
 static const int S0 = 27;
+static const int CONTRACT_LIMIT_SWITCH = 25;
 
 static const int MOTOR_SPEED = 255;
 //String buf;
@@ -34,9 +35,14 @@ void motorLPWM() {
   //Serial.println("MOTOR LPWM");
 }
 
+bool contractLimitReached() {
+  return digitalRead(CONTRACT_LIMIT_SWITCH) == LOW;
+}
+
 void setup() {
   pinMode(S1, INPUT_PULLDOWN);
   pinMode(S0, INPUT_PULLDOWN);
+  pinMode(CONTRACT_LIMIT_SWITCH, INPUT_PULLUP);
 
   pinMode(REN, OUTPUT);
   pinMode(LEN, OUTPUT);
@@ -59,7 +65,11 @@ void loop() {
   if (digitalRead(S0) == HIGH) {
     motorRPWM();
   } else if (digitalRead(S1) == HIGH) {
-    motorLPWM();
+    if (contractLimitReached()) {
+      motorStop();
+    } else {
+      motorLPWM();
+    }
   } else {
     motorStop();
   }

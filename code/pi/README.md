@@ -58,6 +58,22 @@ python voice_bridge.py
 
 If you use a virtual environment, install the packages you actually need rather than blindly applying the full frozen `requirements.txt`.
 
+## Run On Boot
+
+The repo includes a `systemd` unit at `pi/voice-bridge.service`.
+
+If your checkout is at `/home/pi/voice-activated-table-lift/code`, install it with:
+
+```bash
+sudo cp /home/pi/voice-activated-table-lift/code/pi/voice-bridge.service /etc/systemd/system/voice-bridge.service
+sudo systemctl daemon-reload
+sudo systemctl enable voice-bridge.service
+sudo systemctl start voice-bridge.service
+sudo systemctl status voice-bridge.service
+```
+
+If your repo lives somewhere else or runs under a different user, update `User`, `WorkingDirectory`, and `ExecStart` in the service file before enabling it.
+
 ## Configuration
 
 `voice_config.json` currently contains:
@@ -102,6 +118,5 @@ Use a shared ground between the Pi and ESP32, and verify voltage compatibility b
 
 ## Limitations
 
-- No daemon/service file is included yet.
 - No debounce or confidence filtering beyond PocketSphinx keyword thresholds and cooldown.
 - No unit tests are present for the Pi runtime.
