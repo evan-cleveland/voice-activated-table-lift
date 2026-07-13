@@ -61,19 +61,41 @@ If you use a virtual environment, install the packages you actually need rather 
 
 ## Run On Boot
 
-The repo includes a `systemd` unit at `pi/voice-bridge.service`.
+The repo includes a `systemd` unit at `pi/voice-bridge.service` plus install
+and disable helper scripts.
 
-If your checkout is at `/home/pi/voice-activated-table-lift/code`, install it with:
+From the Pi:
 
 ```bash
-sudo cp /home/pi/voice-activated-table-lift/code/pi/voice-bridge.service /etc/systemd/system/voice-bridge.service
-sudo systemctl daemon-reload
-sudo systemctl enable voice-bridge.service
-sudo systemctl start voice-bridge.service
-sudo systemctl status voice-bridge.service
+cd /home/pi/voice-activated-table-lift/code/pi
+chmod +x install-voice-bridge-service.sh disable-voice-bridge-service.sh
+./install-voice-bridge-service.sh
 ```
 
-If your repo lives somewhere else or runs under a different user, update `User`, `WorkingDirectory`, and `ExecStart` in the service file before enabling it.
+The install script copies the service into `/etc/systemd/system/`, rewrites it
+to use the current checkout path and current user, adds that user to the `audio`
+group if needed, enables the service, and restarts it.
+
+Check status and logs with:
+
+```bash
+sudo systemctl status voice-bridge.service
+journalctl -u voice-bridge.service -f
+```
+
+If the install script adds your user to the `audio` group, reboot before relying
+on boot-time audio access:
+
+```bash
+sudo reboot
+```
+
+Disable boot startup with:
+
+```bash
+cd /home/pi/voice-activated-table-lift/code/pi
+./disable-voice-bridge-service.sh
+```
 
 ## Configuration
 
