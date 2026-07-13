@@ -4,6 +4,12 @@
   "cooldown_seconds": 1.5,
   "allow_repeat_stop": true,
   "pocketsphinx_binary": "pocketsphinx_continuous",
+  "audio_backend": "arecord_pipe",
+  "audio_device": "plughw:0,0",
+  "audio_rate": 16000,
+  "audio_channels": 1,
+  "audio_format": "S16_LE",
+  "audio_buffer_time_us": 500000,
   "keywords_file": "keywords.list",
   "keywords": [
     {

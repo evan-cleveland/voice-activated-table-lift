@@ -18,7 +18,8 @@ Command mapping:
 
 Current pin usage:
 
-- Raspberry Pi outputs: BCM `17` and `27`
+- Raspberry Pi voice-command outputs: BCM `17` and `27`
+- Raspberry Pi I2S mic input bus: BCM `18`, `19`, and `20`
 - ESP32 inputs: GPIO `26` and `27`
 - ESP32 contract limit switch input: GPIO `25` with `INPUT_PULLUP`
 - ESP32 motor driver pins:
@@ -51,9 +52,10 @@ code/
 
 1. Flash the ESP32 firmware from `esp/actuator/`.
 2. Wire the Pi GPIO outputs to the ESP32 command inputs and connect grounds.
-3. Install PocketSphinx and the Pi-side Python dependencies.
-4. Adjust `pi/voice_config.json` if you want different phrases or thresholds.
-5. Run `voice_bridge.py` on the Pi.
+3. Wire the I2S microphone to the Pi I2S pins and enable the matching sound-card overlay on the Pi.
+4. Install PocketSphinx and the Pi-side Python dependencies.
+5. Adjust `pi/voice_config.json` if you want different phrases or thresholds.
+6. Run `voice_bridge.py` on the Pi.
 
 ## Notes
 

@@ -43,6 +43,8 @@ The contract limit switch input uses the ESP32 internal pull-up:
 
 When the switch is active, the firmware stops the motor and ignores further retract commands until the switch is released.
 
+As an additional safety check, the firmware also stops if the switch transitions from released to depressed while the `01` command is active. Under normal operation that should not happen during extension; it usually indicates the motor controller direction wiring is reversed.
+
 ## Motor Driver Pins
 
 - `RPWM = 19`

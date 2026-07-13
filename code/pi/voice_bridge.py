@@ -96,8 +96,10 @@ def send_command(o1, o0, command):
     else:
         o0.off()
 
-def start_pocketsphinx(binary, kw_path):
+def start_pocketsphinx(binary, kw_path, audio_device=None):
     cmd = [binary, "-inmic", "yes", "-kws", str(kw_path)]
+    if audio_device:
+        cmd.extend(["-adcdev", str(audio_device)])
     print("[PS] Starting:", " ".join(cmd))
     return subprocess.Popen(
         cmd,
@@ -109,6 +111,51 @@ def start_pocketsphinx(binary, kw_path):
     )
 
 
+def start_arecord_pocketsphinx(cfg, kw_path):
+    audio_device = cfg.get("audio_device") or "plughw:0,0"
+    rate = str(cfg.get("audio_rate", 16000))
+    channels = str(cfg.get("audio_channels", 1))
+    fmt = str(cfg.get("audio_format", "S16_LE"))
+    buffer_time = str(cfg.get("audio_buffer_time_us", 500000))
+
+    arecord_cmd = [
+        "arecord",
+        "-D", str(audio_device),
+        "-c", channels,
+        "-r", rate,
+        "-f", fmt,
+        "-t", "raw",
+        "--buffer-time", buffer_time,
+    ]
+    ps_cmd = [
+        cfg["pocketsphinx_binary"],
+        "-infile", "/dev/stdin",
+        "-kws", str(kw_path),
+        "-samprate", rate,
+    ]
+
+    print("[AUDIO] Starting:", " ".join(arecord_cmd))
+    print("[PS] Starting:", " ".join(ps_cmd))
+
+    arecord = subprocess.Popen(
+        arecord_cmd,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+    ps = subprocess.Popen(
+        ps_cmd,
+        stdin=arecord.stdout,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+        bufsize=1,
+        universal_newlines=True,
+    )
+    if arecord.stdout is not None:
+        arecord.stdout.close()
+    return ps, arecord
+
+
 def main():
     cfg = load_config(CONFIG_PATH)
     kw_path, phrase_to_command = build_keyword_file(cfg)
@@ -116,7 +163,11 @@ def main():
     S1 = DO(17)
     S0 = DO(27)
     #ser = open_serial(cfg["serial_port"], cfg["baud_rate"])
-    ps = start_pocketsphinx(cfg["pocketsphinx_binary"], kw_path)
+    arecord = None
+    if cfg.get("audio_backend") == "arecord_pipe":
+        ps, arecord = start_arecord_pocketsphinx(cfg, kw_path)
+    else:
+        ps = start_pocketsphinx(cfg["pocketsphinx_binary"], kw_path, cfg.get("audio_device"))
 
     last_sent_time = {}
     cooldown = float(cfg["cooldown_seconds"])
@@ -164,6 +215,15 @@ def main():
                 time.sleep(1)
                 if ps.poll() is None:
                     ps.kill()
+        except Exception:
+            pass
+
+        try:
+            if arecord is not None and arecord.poll() is None:
+                arecord.terminate()
+                time.sleep(1)
+                if arecord.poll() is None:
+                    arecord.kill()
         except Exception:
             pass
 
